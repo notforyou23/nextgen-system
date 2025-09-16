@@ -1,0 +1,75 @@
+{
+  "paths": {
+    "project_root": "${PROJECT_ROOT}",
+    "data_dir": "data",
+    "models_dir": "models",
+    "db_path": "data/nextgen/nextgen_system.db"
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+  },
+  "ingestion": {
+    "market": {
+      "provider": "yfinance",
+      "max_retries": 3,
+      "retry_backoff_base": 2.0,
+      "batch_size": 16,
+      "history_days": 60
+    },
+    "news": {
+      "sentiment_cache_hours": 4,
+      "enhanced_search_quota": 10
+    },
+    "universe": {
+      "dynamic": true,
+      "target_size": 0,
+      "min_price": 1.0,
+      "min_avg_volume": 100000,
+      "cache_hours": 1,
+      "exploration_ratio": 0.8,
+      "familiar_symbols": [
+        "NVDA",
+        "META",
+        "TSLA",
+        "AAPL",
+        "GOOG",
+        "GOOGL",
+        "NFLX",
+        "MSFT",
+        "AMZN"
+      ]
+    }
+  },
+  "prediction": {
+    "model_id": "lstm_current",
+    "ensemble_enabled": true,
+    "concurrency": 8,
+    "bounds": {
+      "rejection_threshold": 0.95,
+      "confidence_threshold": 0.6
+    },
+    "up_threshold": 0.5
+  },
+  "feedback": {
+    "validation_window_days": 7,
+    "auto_retrain_enabled": true,
+    "min_accuracy_threshold": 0.45
+  },
+  "trading": {
+    "initial_balance": 10000.0,
+    "max_positions": 20,
+    "risk_per_trade": 0.03
+  },
+  "scheduler": {
+    "timezone": "US/Eastern",
+    "tasks": [
+      { "name": "ingest_market_daily", "cadence": "0 5 * * 1-5" },
+      { "name": "ingest_news_hourly", "cadence": "0 * * * *" },
+      { "name": "build_features_daily", "cadence": "30 6 * * 1-5" },
+      { "name": "run_predictions_daily", "cadence": "0 7 * * 1-5" },
+      { "name": "validate_predictions_daily", "cadence": "0 16 * * 1-5" },
+      { "name": "trading_cycle_intraday", "cadence": "*/15 9-16 * * 1-5" }
+    ]
+  }
+}

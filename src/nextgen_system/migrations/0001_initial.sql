@@ -1,0 +1,2 @@
+-- Placeholder for initial schema migration.
+-- Populate with CREATE TABLE statements matching DATA_CONTRACTS.md when ready.

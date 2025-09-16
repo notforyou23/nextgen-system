@@ -1,0 +1,3 @@
+[console_scripts]
+nextgen-cli = nextgen_system.orchestration.cli:main
+nextgen-migrate = nextgen_system.persistence.migrator:upgrade

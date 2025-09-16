@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=63", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nextgen-system"
+version = "0.1.0"
+description = "Next-generation trading pipeline"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "fastapi>=0.103.0",
+  "uvicorn[standard]>=0.22.0",
+  "pandas>=2.0.0",
+  "numpy>=1.24.0",
+  "sqlalchemy>=2.0.0",
+  "tensorflow>=2.13.0",
+  "typer>=0.9.0",
+  "pydantic>=2.6.0",
+  "vaderSentiment>=3.3.2",
+  "yfinance>=0.2.37"
+]
+
+[project.scripts]
+nextgen-cli = "nextgen_system.orchestration.cli:main"
+nextgen-migrate = "nextgen_system.persistence.migrator:upgrade"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["nextgen_system*",]
